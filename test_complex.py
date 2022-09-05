@@ -32,11 +32,15 @@ def triupper(prob, matrix):
                 else:
                     matrix[i][j]=0
 
-def test_diag_val():
+
+# Below: test for verifying that each element on the diagonal is 0 whatever is the size of the matrix 
+
+@given(dim=st.integers(min_value=0, max_value=100))
+def test_diag_val(dim):
     prob= 0.8
-    dim = 9
-    matrix= np.zeros((dim,dim))
+    matrix= np.ones((dim,dim))
     triupper(prob,matrix)
-    assert matrix[dim-1][dim-1]==0
+    for i in range(0,dim-1):
+        assert matrix[i][i]==0
     
     
