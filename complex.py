@@ -34,6 +34,8 @@ def triupper(prob, matrix):
     col=matrix.shape[1]  # number of columns
     if row!=col:
         raise IndexError("The input matrix must be a square matrix")
+    if not isinstance(matrix, np.ndarray):
+        raise AttributeError("The input matrix must be a numpy ndarray")
     for i in range(0,row):
         for j in range(0,col):
             if (i>j or i==j):
