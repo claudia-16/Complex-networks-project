@@ -12,6 +12,7 @@ from hypothesis import given
 import hypothesis.strategies as st
 import numpy as np
 import random 
+import ipdb
 
 #from complex.py import triupper
 
@@ -22,6 +23,8 @@ import random
 def triupper(prob, matrix):
     row= matrix.shape[0] # number of rows 
     col=matrix.shape[1]  # number of columns
+    if row!=col:
+        raise IndexError("The input matrix must be a square matrix")
     for i in range(0,row):
         for j in range(0,col):
             if (i>j or i==j):
@@ -63,16 +66,16 @@ def test_neg_prob(neg_prob):
     with pytest.raises(ValueError):
         triupper(neg_prob,matrix)
 
-# Problem: up to now the function works also for rectangular matrixes, but i think it is a bug 
-# The input must be a quadratic matrix
-def test_quad_matrix():
+'''
+
+# The input must be a square matrix
+def test_sq_matrix():
     prob=0.8
-    matrix=np.array([1,2,3,4],
-                    [5,6,7,8]) 
+    matrix=np.array([[1,2,3,4],
+                    [5,6,7,8]]) 
     with pytest.raises(IndexError):
         triupper(prob,matrix)
 
-'''
 
 ### PROPERTY TESTS
 
