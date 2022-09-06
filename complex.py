@@ -28,6 +28,8 @@ from sklearn.manifold import TSNE
 # function for obtaining an upper triangular matrix (0s on the main diagonal)
 # the function overwrite the input matrix
 def triupper(prob, matrix):
+    if prob<0:
+        raise ValueError("Probability must be >0")
     row= matrix.shape[0] # number of rows 
     col=matrix.shape[1]  # number of columns
     if row!=col:
