@@ -54,18 +54,35 @@ def test_above_diag_val(dim_bis):
 
 
 ### NEGATIVE TESTS
+'''
+# Problem: dice che -1 è un esempio che falsifica il test!!!!
+# If i give a negative value of probability, the function must raise an error
+@given(neg_prob=st.floats(min_value=-100, max_value=-0.1))
+def test_neg_prob(neg_prob):
+    matrix=np.ones((3,3))
+    with pytest.raises(ValueError):
+        triupper(neg_prob,matrix)
 
+# Problem: up to now the function works also for rectangular matrixes, but i think it is a bug 
+# The input must be a quadratic matrix
+def test_quad_matrix():
+    prob=0.8
+    matrix=np.array([1,2,3,4],
+                    [5,6,7,8]) 
+    with pytest.raises(IndexError):
+        triupper(prob,matrix)
 
+'''
 
-### PROPERTY TEST
-# DA SISTEMARE!!
+### PROPERTY TESTS
+
+# Test for verifying that the function does not change the matrix size
 @given(dim_tris=st.integers(min_value=0, max_value=100))
 def test_same_dim(dim_tris):
     prob=0.8
-    matrix_control= np.ones((dim_tris,dim_tris))
     matrix= np.ones((dim_tris,dim_tris))
     triupper(prob, matrix)
-    #assert np.array(np.shape(matrix))== np.array([dim_tris,dim_tris])
-    assert np.array(np.shape(matrix))== np.array(np.shape(matrix_control))
+    assert np.size(matrix,axis=0)==dim_tris
+    assert np.size(matrix,axis=1)==dim_tris
 
 
