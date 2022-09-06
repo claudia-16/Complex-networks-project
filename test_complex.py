@@ -13,6 +13,7 @@ import hypothesis.strategies as st
 import numpy as np
 import random 
 import ipdb
+#from grappa import should, expect
 
 #from complex.py import triupper
 
@@ -21,6 +22,8 @@ import ipdb
 # function for obtaining an upper triangular matrix (0s on the main diagonal)
 # the function overwrite the input matrix
 def triupper(prob, matrix):
+    if prob<0:
+        raise ValueError("Probability must be >0")
     row= matrix.shape[0] # number of rows 
     col=matrix.shape[1]  # number of columns
     if row!=col:
@@ -57,8 +60,7 @@ def test_above_diag_val(dim_bis):
 
 
 ### NEGATIVE TESTS
-'''
-# Problem: dice che -1 è un esempio che falsifica il test!!!!
+
 # If i give a negative value of probability, the function must raise an error
 @given(neg_prob=st.floats(min_value=-100, max_value=-0.1))
 def test_neg_prob(neg_prob):
@@ -66,7 +68,6 @@ def test_neg_prob(neg_prob):
     with pytest.raises(ValueError):
         triupper(neg_prob,matrix)
 
-'''
 
 # The input must be a square matrix
 def test_sq_matrix():
