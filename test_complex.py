@@ -28,6 +28,8 @@ def triupper(prob, matrix):
     col=matrix.shape[1]  # number of columns
     if row!=col:
         raise IndexError("The input matrix must be a square matrix")
+    if not isinstance(matrix, np.ndarray):
+        raise AttributeError("The input matrix must be a numpy ndarray")
     for i in range(0,row):
         for j in range(0,col):
             if (i>j or i==j):
@@ -76,6 +78,21 @@ def test_sq_matrix():
                     [5,6,7,8]]) 
     with pytest.raises(IndexError):
         triupper(prob,matrix)
+        
+# The input matrix must be a numpy ndarray
+def test_input_type():
+    prob=0.8
+    matrix_tuple=(1,2,3,4)
+    matrix_list=[1,2,3,4,5]
+    matrix_list_list=[[1,2,3],[4,5,6],[7,8,9]]
+    matrix_dic = { "brand": "Ford", "model": "Mustang", "year": 1964}
+    matrix_n= 2.5
+    with pytest.raises(AttributeError):
+        triupper(prob,matrix_tuple)
+        triupper(prob, matrix_list)
+        triupper(prob, matrix_list_list)
+        triupper(prob,matrix_dic)
+        triupper(prob, matrix_n)
 
 
 ### PROPERTY TESTS
@@ -88,5 +105,15 @@ def test_same_dim(dim_tris):
     triupper(prob, matrix)
     assert np.size(matrix,axis=0)==dim_tris
     assert np.size(matrix,axis=1)==dim_tris
+    
+
+# The output matrix is of the same type of the input matrix (i.e., it is a numpy ndarray)
+def test_same_type():
+    prob=0.8
+    matrix= np.ones((5,5))
+    type_in= type(matrix)
+    triupper(prob, matrix)
+    type_out= type(matrix)
+    assert type_out==type_in
 
 
