@@ -30,6 +30,8 @@ from sklearn.manifold import TSNE
 def triupper(prob, matrix):
     row= matrix.shape[0] # number of rows 
     col=matrix.shape[1]  # number of columns
+    if row!=col:
+        raise IndexError("The input matrix must be a square matrix")
     for i in range(0,row):
         for j in range(0,col):
             if (i>j or i==j):
