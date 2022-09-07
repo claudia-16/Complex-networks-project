@@ -22,17 +22,14 @@ from sklearn.manifold import TSNE
 
 
 #%%
-# Simple toy networks
+# Useful functions
 
-
-# function for obtaining an upper triangular matrix (0s on the main diagonal)
-# the function overwrite the input matrix
 def triupper(prob, matrix):
 
     ''''Function for obtaining an upper triangular matrix (0s on the main diagonal).
         The values above the main diagonal are randomly 0 or 1, according to the probability "prob".
         The function overwrites the input matrix
-           
+
         Parameters
         ----------
         prob : positive float
@@ -45,7 +42,9 @@ def triupper(prob, matrix):
         '''
 
     if prob<0:
-        raise ValueError("Probability must be >0")
+        raise ValueError("Probability must be >=0")
+    if prob>1:
+        raise ValueError("Probability must be <=1")
     row= matrix.shape[0] # number of rows
     col=matrix.shape[1]  # number of columns
     if row!=col:
@@ -64,7 +63,10 @@ def triupper(prob, matrix):
                     matrix[i][j]=1
                 else:
                     matrix[i][j]=0
+
                     
+#%%
+# Simple toy networks
 
 #CASE 1 - same size blocks
 
@@ -79,6 +81,7 @@ dim_blocks=200
 aux_b11=np.zeros((dim_blocks,dim_blocks),dtype=(int)) 
 triupper(P_blocks, aux_b11)
 block11=np.add(aux_b11, np.transpose(aux_b11))
+
 
 #block 2 case 1
 aux_b21=np.zeros((dim_blocks,dim_blocks),dtype=(int)) 
