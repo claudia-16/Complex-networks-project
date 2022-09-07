@@ -27,14 +27,11 @@ def triupper(prob, matrix):
         ----------
         prob : positive float
             Probability of having a link (value 1) in the upper triangular matrix
-
         matrix : numpy ndarray
             Input square matrix to be transformed
-
         Returns
         -------
         numpy ndarray
-
         '''
 
     if prob<0:
@@ -45,6 +42,8 @@ def triupper(prob, matrix):
         raise IndexError("The input matrix must be a square matrix")
     if not isinstance(matrix, np.ndarray):
         raise AttributeError("The input matrix must be a numpy ndarray")
+    if matrix.ndim!=2:
+        raise IndexError("The input matrix must be a 2-dimensional numpy array")
     for i in range(0,row):
         for j in range(0,col):
             if (i>j or i==j):
@@ -125,12 +124,17 @@ def test_input_type():
     matrix_list_list=[[1,2,3],[4,5,6],[7,8,9]]
     matrix_dic = { "brand": "Ford", "model": "Mustang", "year": 1964}
     matrix_n= 2.5
+    matrix_3darr= np.array([[[1,2,3],[4,5,6], [7,8,9]], 
+                              [[10,11,12],[13,14,15],[16,17,18]],
+                              [[19,20,21],[22,23,24],[25,26,27]]])
     with pytest.raises(AttributeError):
         triupper(prob,matrix_tuple)
         triupper(prob, matrix_list)
         triupper(prob, matrix_list_list)
         triupper(prob,matrix_dic)
         triupper(prob, matrix_n)
+    with pytest.raises(IndexError):
+        triupper(prob,matrix_3darr)
 
 
 #%%
