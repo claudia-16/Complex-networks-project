@@ -15,6 +15,8 @@ import numpy as np
 #import ipdb
 #from grappa import should, expect
 
+np.random.seed(18)
+
 #%%
 
 def triupper(prob, matrix):
@@ -22,7 +24,7 @@ def triupper(prob, matrix):
     ''''Function for obtaining an upper triangular matrix (0s on the main diagonal).
         The values above the main diagonal are randomly 0 or 1, according to the probability "prob".
         The function overwrites the input matrix
-           
+
         Parameters
         ----------
         prob : positive float
@@ -35,7 +37,9 @@ def triupper(prob, matrix):
         '''
 
     if prob<0:
-        raise ValueError("Probability must be >0")
+        raise ValueError("Probability must be >=0")
+    if prob>1:
+        raise ValueError("Probability must be <=1")
     row= matrix.shape[0] # number of rows
     col=matrix.shape[1]  # number of columns
     if row!=col:
@@ -56,6 +60,8 @@ def triupper(prob, matrix):
                     matrix[i][j]=0
 
 #%%
+
+# triupper TESTS
 
 ### POSITIVE TESTS
 
@@ -124,7 +130,7 @@ def test_input_type():
     matrix_list_list=[[1,2,3],[4,5,6],[7,8,9]]
     matrix_dic = { "brand": "Ford", "model": "Mustang", "year": 1964}
     matrix_n= 2.5
-    matrix_3darr= np.array([[[1,2,3],[4,5,6], [7,8,9]], 
+    matrix_3darr= np.array([[[1,2,3],[4,5,6], [7,8,9]],
                               [[10,11,12],[13,14,15],[16,17,18]],
                               [[19,20,21],[22,23,24],[25,26,27]]])
     with pytest.raises(AttributeError):
@@ -167,5 +173,3 @@ def test_same_type():
     type_out= type(matrix)
     assert type_out==type_in
 
-
-#%%
