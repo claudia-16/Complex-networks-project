@@ -7,12 +7,12 @@ Created on Wed Mar  2 12:51:38 2022
 
 # Software & Computing for Applied Physics project
 
-import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import random
 seed=18
 random.seed(seed)
+import numpy as np
 import seaborn as sns
 from gensim.models import Word2Vec
 import stellargraph as sg
@@ -28,20 +28,39 @@ from sklearn.manifold import TSNE
 # function for obtaining an upper triangular matrix (0s on the main diagonal)
 # the function overwrite the input matrix
 def triupper(prob, matrix):
+
+    ''''Function for obtaining an upper triangular matrix (0s on the main diagonal).
+        The values above the main diagonal are randomly 0 or 1, according to the probability "prob".
+        The function overwrites the input matrix
+           
+        Parameters
+        ----------
+        prob : positive float
+            Probability of having a link (value 1) in the upper triangular matrix
+        matrix : numpy ndarray
+            Input square matrix to be transformed
+        Returns
+        -------
+        numpy ndarray
+        '''
+
     if prob<0:
         raise ValueError("Probability must be >0")
-    row= matrix.shape[0] # number of rows 
+    row= matrix.shape[0] # number of rows
     col=matrix.shape[1]  # number of columns
     if row!=col:
         raise IndexError("The input matrix must be a square matrix")
     if not isinstance(matrix, np.ndarray):
         raise AttributeError("The input matrix must be a numpy ndarray")
+    if matrix.ndim!=2:
+        raise IndexError("The input matrix must be a 2-dimensional numpy array")
     for i in range(0,row):
         for j in range(0,col):
             if (i>j or i==j):
                 matrix[i][j]=0
             else:
-                if (random.uniform(0,1)> 1-prob): # probability of having a link is greater than not having it
+                # probability of having a link is greater than not having it
+                if random.uniform(0,1)> 1-prob:
                     matrix[i][j]=1
                 else:
                     matrix[i][j]=0
