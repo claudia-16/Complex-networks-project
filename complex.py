@@ -64,6 +64,30 @@ def triupper(prob, matrix):
                 else:
                     matrix[i][j]=0
 
+
+def symm_block(dim,prob):
+    '''
+    The function produces a binary symmetric matrix having dimension given by the input value.
+    The 1 values in the matrix are determined by the probability given in input.
+    This function relies on triupper function.
+
+    Parameters
+    ----------
+    dim : int
+        Dimension of the matrix
+    prob : float
+        Probability that a matrix element has value 1
+
+    Returns
+    -------
+    block : numpy array of int values
+
+    '''
+    aux=np.zeros((dim,dim), dtype=int)
+    triupper(prob,aux)
+    block=np.add(aux, np.transpose(aux))
+    return block
+
                     
 #%%
 # Simple toy networks
@@ -78,20 +102,13 @@ P_blocks=0.85
 
 dim_blocks=200
 #block 1 case 1
-aux_b11=np.zeros((dim_blocks,dim_blocks),dtype=(int)) 
-triupper(P_blocks, aux_b11)
-block11=np.add(aux_b11, np.transpose(aux_b11))
-
+block11=symm_block(dim_blocks, P_blocks)
 
 #block 2 case 1
-aux_b21=np.zeros((dim_blocks,dim_blocks),dtype=(int)) 
-triupper(P_blocks, aux_b21)
-block21=np.add(aux_b21, np.transpose(aux_b21))
+block21=symm_block(dim_blocks, P_blocks)
 
 #noise directly in the network
-aux_n1=np.zeros((dim_toy2,dim_toy2),dtype=(int)) 
-triupper(P_noise, aux_n1)
-toy_net2=np.add(aux_n1, np.transpose(aux_n1))
+toy_net2=symm_block(dim_toy2,P_noise)
 
 zona_b11= np.arange(0, dim_blocks,dtype=int)
 zona_b21 = np.arange(dim_blocks, dim_toy2,dtype=int)
@@ -113,19 +130,13 @@ dim_block1=80
 dim_block2=320
 
 # block 1 case 2
-aux_b12=np.zeros((dim_block1,dim_block1),dtype=(int)) 
-triupper(P_blocks, aux_b12)
-block12=np.add(aux_b12, np.transpose(aux_b12))
+block12=symm_block(dim_block1, P_blocks)
 
 #block 2 case 2
-aux_b22=np.zeros((dim_block2,dim_block2),dtype=(int)) 
-triupper(P_blocks, aux_b22)
-block22=np.add(aux_b22, np.transpose(aux_b22))
+block22=symm_block(dim_block2, P_blocks)
 
 #block noise directly in the network
-aux_n2=np.zeros((dim_toy2,dim_toy2),dtype=(int)) 
-triupper(P_noise, aux_n2)
-toy_net2bis=np.add(aux_n2, np.transpose(aux_n2))
+toy_net2bis=symm_block(dim_toy2, P_noise)
 
 zona_b12= np.arange(0, dim_block1,dtype=int)
 zona_b22 = np.arange(dim_block1, dim_toy2,dtype=int)
