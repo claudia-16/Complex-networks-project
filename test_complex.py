@@ -20,22 +20,19 @@ np.random.seed(18)
 #%%
 
 def triupper(prob, matrix):
+    '''
+    Function for obtaining an upper triangular matrix (0s on the main diagonal).
+    The values above the main diagonal are randomly 0 or 1, according to the probability "prob".
+    The function overwrites the input matrix.
 
-    ''''Function for obtaining an upper triangular matrix (0s on the main diagonal).
-        The values above the main diagonal are randomly 0 or 1, according to the probability "prob".
-        The function overwrites the input matrix
+    Parameters
+    ----------
+    prob : positive float
+        Probability of having a link (value 1) in the upper triangular matrix
+    matrix : numpy ndarray
+        Input square matrix to be transformed
 
-        Parameters
-        ----------
-        prob : positive float
-            Probability of having a link (value 1) in the upper triangular matrix
-        matrix : numpy ndarray
-            Input square matrix to be transformed
-        Returns
-        -------
-        numpy ndarray
-        '''
-
+    '''
     if prob<0:
         raise ValueError("Probability must be >=0")
     if prob>1:
@@ -58,6 +55,7 @@ def triupper(prob, matrix):
                     matrix[i][j]=1
                 else:
                     matrix[i][j]=0
+
 
 #%%
 
@@ -121,7 +119,7 @@ def test_sq_matrix():
 # The input matrix must be a numpy ndarray
 def test_input_type():
     '''
-    Test verifying an error is raised when the input matrix is not a numpy ndarray
+    Test verifying an error is raised when the input matrix is not a numpy 2-dimansional array
 
     '''
     prob=0.8
@@ -143,7 +141,24 @@ def test_input_type():
         triupper(prob,matrix_3darr)
 
 
-#%%
+def test_no_rep():
+    '''
+    Test verifying that the same input can (and in general will) provide different outputs
+
+    Returns
+    -------
+    None.
+
+    '''
+    dim=5
+    prob=0.5
+    matrix_1=np.zeros((dim, dim))
+    matrix_2=np.zeros((dim, dim))
+    triupper(prob, matrix_1)
+    triupper(prob, matrix_2)
+    assert np.all(matrix_1== matrix_2) == False
+    
+
 
 ### PROPERTY TESTS
 
