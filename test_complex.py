@@ -211,24 +211,21 @@ def test_zero_diag(dim_4):
     '''
     Test verifying that each element on the main diagonal is 0,
     whatever is the size of the matrix.
-    
+
     '''
     prob=0.8
-    a=symm_block(dim_4,prob)
-    assert (a[i][i]==0 for i in range(0,dim_4))
+    matrix=symm_block(dim_4,prob)
+    assert (matrix[i][i]==0 for i in range(0,dim_4))
 
 
 @given(prob=st.floats(min_value=0, max_value=1))
 def test_symm(prob):
     '''
     Test verifying that the matrix generated is actually symmetric,
-    whatever is the probability given in input. 
-    
+    whatever is the probability given in input.
+
     '''
     dim=10
-    a=symm_block(dim, prob)
-    assert (a[i][j]==a[j][i] for i,j in range(0,dim))
+    matrix=symm_block(dim, prob)
+    assert (matrix[i][j]==matrix[j][i] for i,j in range(0,dim))
     
-
-
-
