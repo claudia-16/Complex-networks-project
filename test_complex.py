@@ -173,3 +173,62 @@ def test_same_type():
     type_out= type(matrix)
     assert type_out==type_in
 
+
+#%%
+
+def symm_block(dim,prob):
+    '''
+    The function produces a binary symmetric matrix having dimension given by the input value.
+    The 1 values in the matrix are determined by the probability given in input.
+    This function relies on triupper function.
+
+    Parameters
+    ----------
+    dim : int
+        Dimension of the matrix
+    prob : float
+        Probability that a matrix element has value 1
+
+    Returns
+    -------
+    block : numpy array of int values
+
+    '''
+    aux=np.zeros((dim,dim), dtype=int)
+    triupper(prob,aux)
+    block=np.add(aux, np.transpose(aux))
+    return block
+
+
+#%%
+
+# symm_block TESTS
+
+### POSITIVE TESTS
+
+@given(dim_4=st.integers(min_value=0, max_value=100))
+def test_zero_diag(dim_4):
+    '''
+    Test verifying that each element on the main diagonal is 0,
+    whatever is the size of the matrix.
+    
+    '''
+    prob=0.8
+    a=symm_block(dim_4,prob)
+    assert (a[i][i]==0 for i in range(0,dim_4))
+
+
+@given(prob=st.floats(min_value=0, max_value=1))
+def test_symm(prob):
+    '''
+    Test verifying that the matrix generated is actually symmetric,
+    whatever is the probability given in input. 
+    
+    '''
+    dim=10
+    a=symm_block(dim, prob)
+    assert (a[i][j]==a[j][i] for i,j in range(0,dim))
+    
+
+
+
