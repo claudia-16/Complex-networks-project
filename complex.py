@@ -26,44 +26,49 @@ random.seed(SEED)
 # Useful functions
 
 def triupper(prob, matrix):
+    '''
+    Function for obtaining an upper triangular matrix (0s on the main diagonal).
+    The values above the main diagonal are randomly 0 or 1, according to the probability "prob".
+    The function overwrites the input matrix.
 
-    ''''Function for obtaining an upper triangular matrix (0s on the main diagonal).
-        The values above the main diagonal are randomly 0 or 1, according to the probability "prob".
-        The function overwrites the input matrix
+    Parameters
+    ----------
+    prob : positive float
+        Probability of having a link (value 1) in the upper triangular matrix
+    matrix : numpy.ndarray
+        Input square matrix to be transformed
 
-        Parameters
-        ----------
-        prob : positive float
-            Probability of having a link (value 1) in the upper triangular matrix
-        matrix : numpy ndarray
-            Input square matrix to be transformed
-        Returns
-        -------
-        numpy ndarray
-        '''
+    Returns
+    -------
+    matrix : numpy.ndarray
+        This output matrix is identical to the transformed input one.
 
+    '''
     if prob<0:
         raise ValueError("Probability must be >=0")
     if prob>1:
         raise ValueError("Probability must be <=1")
     row= matrix.shape[0] # number of rows
-    col=matrix.shape[1]  # number of columns
+    col= matrix.shape[1]  # number of columns
     if row!=col:
         raise IndexError("The input matrix must be a square matrix")
     if not isinstance(matrix, np.ndarray):
         raise AttributeError("The input matrix must be a numpy ndarray")
     if matrix.ndim!=2:
         raise IndexError("The input matrix must be a 2-dimensional numpy array")
+
     for i in range(0,row):
         for j in range(0,col):
             if (i>j or i==j):
-                matrix[i][j]=0
+                matrix[i][j]=int(0)
             else:
                 # probability of having a link is greater than not having it
                 if random.uniform(0,1)> 1-prob:
-                    matrix[i][j]=1
+                    matrix[i][j]=int(1)
                 else:
-                    matrix[i][j]=0
+                    matrix[i][j]=int(0)
+
+    return matrix
 
 
 def symm_block(dim,prob):
