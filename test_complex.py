@@ -8,6 +8,7 @@ Created on Mon Sep  5 11:44:32 2022
 #TESTING
 
 import random
+import filecmp
 import pytest
 from hypothesis import given
 import hypothesis.strategies as st
@@ -29,8 +30,13 @@ def triupper(prob, matrix):
     ----------
     prob : positive float
         Probability of having a link (value 1) in the upper triangular matrix
-    matrix : numpy ndarray
+    matrix : numpy.ndarray
         Input square matrix to be transformed
+
+    Returns
+    -------
+    matrix : numpy.ndarray
+        This output matrix is identical to the transformed input one.
 
     '''
     if prob<0:
@@ -38,28 +44,81 @@ def triupper(prob, matrix):
     if prob>1:
         raise ValueError("Probability must be <=1")
     row= matrix.shape[0] # number of rows
-    col=matrix.shape[1]  # number of columns
+    col= matrix.shape[1]  # number of columns
     if row!=col:
         raise IndexError("The input matrix must be a square matrix")
     if not isinstance(matrix, np.ndarray):
         raise AttributeError("The input matrix must be a numpy ndarray")
     if matrix.ndim!=2:
         raise IndexError("The input matrix must be a 2-dimensional numpy array")
+
     for i in range(0,row):
         for j in range(0,col):
             if (i>j or i==j):
-                matrix[i][j]=0
+                matrix[i][j]=int(0)
             else:
                 # probability of having a link is greater than not having it
                 if random.uniform(0,1)> 1-prob:
-                    matrix[i][j]=1
+                    matrix[i][j]=int(1)
                 else:
-                    matrix[i][j]=0
+                    matrix[i][j]=int(0)
+
+    return matrix
+
+
+#%%
+
+# Alternative way of implementing triupper such that the input matrix is not overwritten.
+# In this case the input parameters should be the link probability and the dimension
+# of the desired output matrix.
+
+def triupper_bis(prob, dim):
+    '''
+    Function for obtaining a binary upper triangular matrix
+    (0s on the main diagonal) of dimension "dim".
+    The values above the main diagonal are randomly 0 or 1,
+    according to the probability "prob".
+
+
+    Parameters
+    ----------
+    prob : positive float
+        Probability of having a link (value 1) in the upper triangular matrix
+    dim : int
+        Dimension of the output matrix
+
+    Returns
+    -------
+    triup_mat : numpy.ndarray
+
+    '''
+    if prob<0:
+        raise ValueError("Probability must be >=0")
+    if prob>1:
+        raise ValueError("Probability must be <=1")
+    if not isinstance(dim, int):
+        raise TypeError("The dimension parameter must be an int number")
+
+
+    triup_mat=np.zeros((dim,dim))
+    for j in range(0,dim):
+        for i in range(0,j):
+            # probability of having a link is greater than not having it
+            if random.uniform(0,1)> 1-prob:
+                triup_mat[i][j]=1
+            else:
+                triup_mat[i][j]=0
+
+    return triup_mat
 
 
 #%%
 
 # triupper TESTS
+
+# Notes: the maximum dimension used in these tests is 100. This because otherwise,
+# for large values, there are issues due to the computational time required
+
 
 ### POSITIVE TESTS
 
@@ -116,7 +175,6 @@ def test_sq_matrix():
         triupper(prob,matrix)
 
 
-# The input matrix must be a numpy ndarray
 def test_input_type():
     '''
     Test verifying an error is raised when the input matrix is not a numpy 2-dimansional array
@@ -145,10 +203,6 @@ def test_no_rep():
     '''
     Test verifying that the same input can (and in general will) provide different outputs
 
-    Returns
-    -------
-    None.
-
     '''
     dim=5
     prob=0.5
@@ -156,8 +210,30 @@ def test_no_rep():
     matrix_2=np.zeros((dim, dim))
     triupper(prob, matrix_1)
     triupper(prob, matrix_2)
-    assert np.all(matrix_1== matrix_2) == False
-    
+    assert not np.all(matrix_1== matrix_2)
+
+
+def test_no_idempotence():
+    '''
+    Test verifying that, in general, if we give in input to triupper a matrix
+    and then we use the output as a new input for triupper, the matrix will change
+    even considering the same probability value.
+
+    '''
+    dim=5
+    prob=0.5
+    matrix= np.zeros((dim,dim))
+    out_1= triupper(prob, matrix) # after this passage matrix is overwritten
+    np.savetxt('out_1.txt', out_1)
+    out_2= triupper(prob, out_1) # after this passage both out_1 and matrix are overwritten!
+    np.savetxt('out_2.txt', out_2)
+    identity = filecmp.cmp( 'out_1.txt', 'out_2.txt', shallow=False)
+    assert not identity
+    assert np.all(matrix == out_2)
+
+# WARNING! About the test_no_idempotence above: the saving of intemediate results (matrix)
+# is required because matrix are overwritten. The second assert indeed doesn't find any difference
+# between the "original" matrix and the "pluri-transformed" out_2
 
 
 ### PROPERTY TESTS
@@ -178,7 +254,7 @@ def test_same_dim(dim_tris):
 
 def test_same_type():
     '''
-    Test verifying the output matrix is of the same type of the input matrix (numpy ndarray)
+    Test verifying the output matrix is of the same type of the input matrix (numpy.ndarray)
 
     '''
     prob=0.8
@@ -187,6 +263,18 @@ def test_same_type():
     triupper(prob, matrix)
     type_out= type(matrix)
     assert type_out==type_in
+
+
+@given(dim_5=st.integers(min_value=0, max_value=100))
+def test_overwrite(dim_5):
+    '''
+    Test verifying that the input matrix is overwritten
+
+    '''
+    prob=1
+    matrix_in= np.zeros((dim_5,dim_5))
+    matrix_out= triupper(prob,matrix_in)
+    assert np.all(matrix_in == matrix_out)
 
 
 #%%
@@ -206,7 +294,7 @@ def symm_block(dim,prob):
 
     Returns
     -------
-    block : numpy array of int values
+    block : numpy.ndarray of int values
 
     '''
     aux=np.zeros((dim,dim), dtype=int)
