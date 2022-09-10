@@ -39,10 +39,10 @@ def triupper(prob, matrix):
         This output matrix is identical to the transformed input one.
 
     '''
-    if prob<0:
-        raise ValueError("Probability must be >=0")
-    if prob>1:
-        raise ValueError("Probability must be <=1")
+    if not isinstance(prob,(int,float)):
+        raise TypeError("The probability must be an integer or a float value")
+    if prob<0 or prob>1:
+        raise ValueError("Probability must be >=0 and <=1")
     row= matrix.shape[0] # number of rows
     col= matrix.shape[1]  # number of columns
     if row!=col:
@@ -68,55 +68,9 @@ def triupper(prob, matrix):
 
 #%%
 
-# Alternative way of implementing triupper such that the input matrix is not overwritten.
-# In this case the input parameters should be the link probability and the dimension
-# of the desired output matrix.
-
-def triupper_bis(prob, dim):
-    '''
-    Function for obtaining a binary upper triangular matrix
-    (0s on the main diagonal) of dimension "dim".
-    The values above the main diagonal are randomly 0 or 1,
-    according to the probability "prob".
-
-
-    Parameters
-    ----------
-    prob : positive float
-        Probability of having a link (value 1) in the upper triangular matrix
-    dim : int
-        Dimension of the output matrix
-
-    Returns
-    -------
-    triup_mat : numpy.ndarray
-
-    '''
-    if prob<0:
-        raise ValueError("Probability must be >=0")
-    if prob>1:
-        raise ValueError("Probability must be <=1")
-    if not isinstance(dim, int):
-        raise TypeError("The dimension parameter must be an int number")
-
-
-    triup_mat=np.zeros((dim,dim))
-    for j in range(0,dim):
-        for i in range(0,j):
-            # probability of having a link is greater than not having it
-            if random.uniform(0,1)> 1-prob:
-                triup_mat[i][j]=1
-            else:
-                triup_mat[i][j]=0
-
-    return triup_mat
-
-
-#%%
-
 # triupper TESTS
 
-# Notes: the maximum dimension used in these tests is 100. This because otherwise,
+# NB: the maximum dimension used in these tests is 100. This because otherwise,
 # for large values, there are issues due to the computational time required
 
 
@@ -186,9 +140,7 @@ def test_input_type():
     matrix_list_list=[[1,2,3],[4,5,6],[7,8,9]]
     matrix_dic = { "brand": "Ford", "model": "Mustang", "year": 1964}
     matrix_n= 2.5
-    matrix_3darr= np.array([[[1,2,3],[4,5,6], [7,8,9]],
-                              [[10,11,12],[13,14,15],[16,17,18]],
-                              [[19,20,21],[22,23,24],[25,26,27]]])
+    matrix_3darr= np.arange(27).reshape(3,3,3)
     with pytest.raises(AttributeError):
         triupper(prob,matrix_tuple)
         triupper(prob, matrix_list)
@@ -281,8 +233,8 @@ def test_overwrite(dim_5):
 
 def symm_block(dim,prob):
     '''
-    The function produces a binary symmetric matrix having dimension given by the input value.
-    The 1 values in the matrix are determined by the probability given in input.
+    The function produces a binary symmetric matrix having dimension given by the input value "dim".
+    The 1 values in the matrix are determined by the probability given in input "prob".
     This function relies on triupper function.
 
     Parameters
@@ -297,6 +249,11 @@ def symm_block(dim,prob):
     block : numpy.ndarray of int values
 
     '''
+    if not isinstance(dim,int):
+        raise TypeError("The dimension parameter must be an integer")
+    if dim <0:
+        raise ValueError("The dimension parameter must be a positive integer")
+
     aux=np.zeros((dim,dim), dtype=int)
     triupper(prob,aux)
     block=np.add(aux, np.transpose(aux))
@@ -307,7 +264,72 @@ def symm_block(dim,prob):
 
 # symm_block TESTS
 
-### POSITIVE TESTS
+### POSITIVE TEST
+
+@given(prob=st.floats(min_value=0, max_value=1))
+def test_symm(prob):
+    '''
+    Test verifying that the matrix generated is actually symmetric,
+    whatever is the probability given in input.
+
+    '''
+    dim=10
+    matrix=symm_block(dim, prob)
+    assert (matrix[i][j]==matrix[j][i] for i,j in range(0,dim))
+
+
+### NEGATIVE TESTS
+
+def test_no_rep_bis():
+    '''
+    Test verifying that the same input parameters can (and in general will)
+    provide different outcomes.
+
+    '''
+    dim= 10
+    prob= 0.8
+    matrix_1= symm_block(dim,prob)
+    matrix_2= symm_block(dim,prob)
+    assert not np.all(matrix_1==matrix_2)
+
+
+def test_wrong_prob_val():
+    '''
+    Test verifying that if the input parameters don't match the triupper function
+    requirements, an error is raised.
+
+    '''
+    prob_1=-0.5
+    prob_2= 5
+    prob_3= complex(2,1)
+    dim=5
+    with pytest.raises(ValueError):
+        symm_block(dim, prob_1)
+        symm_block(dim, prob_2)
+    with pytest.raises(TypeError):
+        symm_block(dim, prob_3)
+
+
+def test_wrong_dim_val():
+    '''
+    Test verifying an error is raised if the input dimension does not match
+    the function requirements.
+
+    '''
+    prob= 0.4
+    dim_1= 0.5
+    dim_2= complex(3,5)
+    dim_3= "a"
+    dim_4= -8
+    with pytest.raises(TypeError):
+        symm_block(dim_1, prob)
+        symm_block(dim_2, prob)
+        symm_block(dim_3, prob)
+    with pytest.raises(ValueError):
+        symm_block(dim_4, prob)
+
+
+### PROPERTY TESTS
 
 @given(dim_4=st.integers(min_value=0, max_value=100))
 def test_zero_diag(dim_4):
@@ -320,15 +342,92 @@ def test_zero_diag(dim_4):
     matrix=symm_block(dim_4,prob)
     assert (matrix[i][i]==0 for i in range(0,dim_4))
 
-
-@given(prob=st.floats(min_value=0, max_value=1))
-def test_symm(prob):
+@given(dim_6 =st.integers(min_value=0, max_value=100))
+def test_transpose(dim_6):
     '''
-    Test verifying that the matrix generated is actually symmetric,
-    whatever is the probability given in input.
+    Test verifying that the transpose of a symmetric matrix is identical
+    to the matrix itself.
 
     '''
-    dim=10
-    matrix=symm_block(dim, prob)
-    assert (matrix[i][j]==matrix[j][i] for i,j in range(0,dim))
+    prob=0.5
+    matrix= symm_block(dim_6, prob)
+    matrix_t= np.transpose(matrix)
+    assert np.all(matrix == matrix_t)
+
+
+#%%
+
+# Alternative way of implementing triupper such taht no overwriting problems should arise.
+# In this case the input parameters should be the link probability and the dimension
+# of the desired output matrix.
+
+def triupper_bis(prob, dim):
+    '''
+    Function for obtaining a binary upper triangular matrix
+    (0s on the main diagonal) of dimension "dim".
+    The values above the main diagonal are randomly 0 or 1,
+    according to the probability "prob".
+
+
+    Parameters
+    ----------
+    prob : positive float or int in [0,1]
+        Probability of having a link (value 1) in the upper triangular matrix
+    dim : int
+        Dimension of the output matrix
+
+    Returns
+    -------
+    triup_mat : numpy.ndarray
+
+    '''
+    if not isinstance(prob,(int,float)):
+        raise TypeError("The probability must be an integer or a float value")
+    if prob<0 or prob>1:
+        raise ValueError("Probability must be >=0 and <=1")
+    if not isinstance(dim, int):
+        raise TypeError("The dimension parameter must be an int number")
+    if dim <0:
+        raise ValueError("The dimension must be a positive int number")
+
+
+    triup_mat=np.zeros((dim,dim))
+    for j in range(0,dim):
+        for i in range(0,j):
+            # probability of having a link is greater than not having it
+            if random.uniform(0,1)> 1-prob:
+                triup_mat[i][j]=1
+            else:
+                triup_mat[i][j]=0
+
+    return triup_mat
+
+
+#%%
+
+# triupper_bis TESTS
+
+### POSITIVE TESTS
+
+@given(dim_7 =st.integers(min_value=0, max_value=100))
+def test_upper(dim_7):
+    '''
+    Test verifying the matrix generated is actually upper triangular
+    and binary, whatever dimension is given in input.
+
+    '''
+    prob=1
+    tri_mat= triupper_bis(prob, dim_7)
+
+    sum_tot= np.sum(tri_mat)
+    sum_1= np.sum(tri_mat[tri_mat==1])
+    ones= np.where(tri_mat==1) # tuple containing 2 arrays:
+                             #one with row indexes, the other with col indexes
+    bool_list=[]
+    for i in range(len(ones[0])):         # for each 1 in the matrix
+        bool_list.append(ones[0][i]< ones[1][i])  # row index smaller than col index
+    assert sum_1 == (dim_7**2 -dim_7)/2
+    assert sum_tot == sum_1  # where there are not 1s, there are 0s
+    assert len(ones[0]) == (dim_7**2 -dim_7)/2  # number of ones in the matrix
+    assert np.all(bool_list)  # the matrix is upper triangular
     
