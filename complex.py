@@ -44,10 +44,10 @@ def triupper(prob, matrix):
         This output matrix is identical to the transformed input one.
 
     '''
-    if prob<0:
-        raise ValueError("Probability must be >=0")
-    if prob>1:
-        raise ValueError("Probability must be <=1")
+    if not isinstance(prob,(int,float)):
+        raise TypeError("The probability must be an integer or a float value")
+    if prob<0 or prob>1:
+        raise ValueError("Probability must be >=0 and <=1")
     row= matrix.shape[0] # number of rows
     col= matrix.shape[1]  # number of columns
     if row!=col:
@@ -73,8 +73,8 @@ def triupper(prob, matrix):
 
 def symm_block(dim,prob):
     '''
-    The function produces a binary symmetric matrix having dimension given by the input value.
-    The 1 values in the matrix are determined by the probability given in input.
+    The function produces a binary symmetric matrix having dimension given by the input value "dim".
+    The 1 values in the matrix are determined by the probability given in input "prob".
     This function relies on triupper function.
 
     Parameters
@@ -86,9 +86,14 @@ def symm_block(dim,prob):
 
     Returns
     -------
-    block : numpy array of int values
+    block : numpy.ndarray of int values
 
     '''
+    if not isinstance(dim,int):
+        raise TypeError("The dimension parameter must be an integer")
+    if dim <0:
+        raise ValueError("The dimension parameter must be a positive integer")
+
     aux=np.zeros((dim,dim), dtype=int)
     triupper(prob,aux)
     block=np.add(aux, np.transpose(aux))
