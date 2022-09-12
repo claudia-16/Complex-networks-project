@@ -1,6 +1,10 @@
 # Software-project
 
-GENERATION OF BLOCK-NETWORKS AND ANALYSIS
+# GENERATION OF BLOCK-NETWORKS AND ANALYSIS
+This project focuses on the generation of two "toy-networks" mimicking chromosome contact maps. These simplfied networks are based on Erdos-Renyi networks and
+the purpose of the project is to analyse these matrixes by using the node2vec algorithm. This algorithm will provide a node embedding on which we can work and 
+see how nodes can be labeled. For the labelling task we focused here on the K-means clustering algorithm and we compare its output with the true labels. 
+Further checks are made by changing the embedding dimension set in the node2vec algorithm. All the comparisons here are made via t-SNE visualization.
 
 # 1) Networks generation
 The project consists in the generation of two "toy-networks" and their analysis.
