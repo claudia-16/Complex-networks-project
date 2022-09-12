@@ -1,5 +1,3 @@
-# Software & Computing project
-
 # Simulation of chromosome contact maps and analysis with node2vec algorithm
 This project focuses on the generation of two "toy-networks" mimicking chromosome contact maps. These simplfied networks are based on Erdos-Renyi networks and
 the purpose of the project is to analyse these matrixes by using the node2vec algorithm. This algorithm will provide a node embedding on which we can work and 
