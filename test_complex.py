@@ -434,7 +434,7 @@ def test_upper(dim_7):
 
 ### NEGATIVE TESTS
 
-def test_no_rep_bis():
+def test_no_rep_tris():
     '''
     Test verifying that the same input parameters can (and in general will)
     provide different results.
