@@ -357,8 +357,8 @@ def test_transpose(dim_6):
 
 #%%
 
-# Alternative way of implementing triupper such taht no overwriting problems should arise.
-# In this case the input parameters should be the link probability and the dimension
+# Alternative way of implementing triupper such taht no overwriting problems arises.
+# In this case the input parameters are the link probability and the dimension
 # of the desired output matrix.
 
 def triupper_bis(prob, dim):
@@ -371,7 +371,7 @@ def triupper_bis(prob, dim):
 
     Parameters
     ----------
-    prob : positive float or int in [0,1]
+    prob : float or int in [0,1]
         Probability of having a link (value 1) in the upper triangular matrix
     dim : int
         Dimension of the output matrix
@@ -430,4 +430,19 @@ def test_upper(dim_7):
     assert sum_tot == sum_1  # where there are not 1s, there are 0s
     assert len(ones[0]) == (dim_7**2 -dim_7)/2  # number of ones in the matrix
     assert np.all(bool_list)  # the matrix is upper triangular
+
+
+### NEGATIVE TESTS
+
+def test_no_rep_bis():
+    '''
+    Test verifying that the same input parameters can (and in general will)
+    provide different results.
+
+    '''
+    dim= 10
+    prob= 0.5
+    mat_1= triupper_bis(prob, dim)
+    mat_2= triupper_bis(prob, dim)
+    assert not np.all(mat_1 == mat_2)
     
