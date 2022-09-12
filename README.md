@@ -39,7 +39,7 @@ by using a t-SNE algorithm. We make also further analysis by changing the embedd
 - sklearn.manfold
 
 # Main parameters
-In the following lines are indicated the main parameters the user can vary.
+In the following lines are indicated the main parameters the user can vary. \
 In the networks generation part:
 - *DIM_TOY2*: overall dimension of the "toy-network" generated;
 - *P_NOISE*: probability of having a noise link in the network;
