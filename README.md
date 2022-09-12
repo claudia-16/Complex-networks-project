@@ -6,8 +6,7 @@ Further checks are made by changing the embedding dimension set in the node2vec 
 
 # Project structure
 ***1) Networks generation*** \
-The project consists in the generation of two "toy-networks" and their analysis.
-These networks are block-networks intended to represent a simplfied version of chromosomes contact maps. We considered the presence of two chromosomes.
+The two networks generated are block-networks intended to represent a simplfied version of chromosomes contact maps. We considered the presence of two chromosomes.
 Matrixes are  therefore symmetric matrixes, whose indexes represent genomic loci (which are the nodes of the network). In this simplified representation, 
 matrixes are binary, having 1 for indicating the presence of a link and 0 for its absence.
 The majority of interactions (i.e. links) occurs within chromosomes, therefore matrixes are block matrixes having the majority of non-zero values 
@@ -26,5 +25,29 @@ The way these walks are biased can be set by the user modifying the "p" and "q" 
 These walks are sequences of nodes from which a node embedding is extracted.
 Once we obtain the node embedding, we apply to it the K-means clustering algorithm. The optimal value for k is decided by using the elbow method.
 We compare then the way nodes are labelled by the k-means algorithm with the true labels we know (i.e., the chromosome of belonging). This comparison is made visually
-by using a t-SNE algorithm. Since this method does not provide good results, we make further analysis by changing the embedding dimension parameter.
-We compare then the outputs by looking at their t-SNE representation considering the true labels of nodes.
+by using a t-SNE algorithm. We make also further analysis by changing the embedding dimension parameter of node2vec and seeing how nodes, with their true labels, are located in the t-SNE visualization.
+
+# Dependencies
+- random
+- numpy
+- pandas
+- seaborn
+- matplotlib.pyplot
+- gensim.models
+- stellargraph.data
+- sklearn.cluster
+- sklearn.manfold
+
+# Main parameters
+In the following lines are indicated the main parameters the user can vary.
+In the networks generation part:
+- *DIM_TOY2*: overall dimension of the "toy-network" generated;
+- *P_NOISE*: probability of having a noise link in the network;
+- *P_BLOCKS*: probability of having a link between 2 loci belonging to the same chromosome;
+- *DIM_BLOCKS*: size of the chromosomes for the case in which the two of them have equal size. 
+                N.B.: this parameter should be coherent with *DIM_TOY2*.
+- *DIM_BLOCK1* and *DIM_BLOCK2*: sizes of the two chromosomes (for the case in which their sizes can be different).
+                N.B.: their values should be coherent with *DIM_TOY2*.
+
+In the network analysis part:
+- **:
