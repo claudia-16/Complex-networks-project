@@ -1,12 +1,13 @@
-# Software-project
+# Software & Computing project
 
-# GENERATION OF BLOCK-NETWORKS AND ANALYSIS
+# Simulation of chromosome contact maps and analysis with node2vec algorithm
 This project focuses on the generation of two "toy-networks" mimicking chromosome contact maps. These simplfied networks are based on Erdos-Renyi networks and
 the purpose of the project is to analyse these matrixes by using the node2vec algorithm. This algorithm will provide a node embedding on which we can work and 
 see how nodes can be labeled. For the labelling task we focused here on the K-means clustering algorithm and we compare its output with the true labels. 
 Further checks are made by changing the embedding dimension set in the node2vec algorithm. All the comparisons here are made via t-SNE visualization.
 
-# 1) Networks generation
+# Project structure
+***1) Networks generation*** \
 The project consists in the generation of two "toy-networks" and their analysis.
 These networks are block-networks intended to represent a simplfied version of chromosomes contact maps. We considered the presence of two chromosomes.
 Matrixes are  therefore symmetric matrixes, whose indexes represent genomic loci (which are the nodes of the network). In this simplified representation, 
@@ -19,11 +20,11 @@ Further parameters we set are the chromosome dimensions, i.e the block sizes. Th
 in the first one we consider chromosomes of the same size (both of them have 200 loci); in the second network instead we have chromosomes of very different sizes 
 (one has 80 loci and the other 320). Overall the two networks have the same dimensions of 400 nodes.
 
-# 2) Network analysis
+***2) Network analysis*** \
 For the two networks we adopted same analysis approach. 
 First, we used node2vec algorithm to obtain a node embedding. The node2vec algorithm generates a series of pseudo-random walks through the network.
 The way these walks are biased can be set by the user modifying the "p" and "q" parameters, choosing a more BFS-like approach rather than one more DFS-like
-(see for details node2vec: Scalable Feature Learning for Networks, 2016. url: https://arxiv.org/abs/1607.00653).
+(see for details *node2vec: Scalable Feature Learning for Networks, 2016. url: https://arxiv.org/abs/1607.00653*).
 These walks are sequences of nodes from which a node embedding is extracted.
 Once we obtain the node embedding, we apply to it the K-means clustering algorithm. The optimal value for k is decided by using the elbow method.
 We compare then the way nodes are labelled by the k-means algorithm with the true labels we know (i.e., the chromosome of belonging). This comparison is made visually
