@@ -1,10 +1,8 @@
 # Simulation of chromosome contact maps and analysis with node2vec algorithm
-This project focuses on the generation of two "toy-networks" mimicking chromosome contact maps. These simplfied networks are based on Erdos-Renyi networks and
-the purpose of the project is to analyse these matrixes by using the node2vec algorithm. This algorithm will provide a node embedding on which we can work and 
-see how nodes can be labeled. For the labelling task we focused here on the K-means clustering algorithm and we compare its output with the true labels. 
+This project focuses on the generation of two "toy-networks" mimicking chromosome contact maps. These simplfied networks are based on Erdos-Renyi networks and the purpose of the project is to analyse these matrixes by using the node2vec algorithm. This algorithm will provide a node embedding on which we can work and see how nodes can be labeled. For the labelling task we focused here on the K-means clustering algorithm and we compare its output with the true labels, which are their chromosome of belonging.
 Further checks are made by changing the embedding dimension set in the node2vec algorithm. All the comparisons here are made via t-SNE visualization.
 
-# Project structure
+## Project structure
 ***1) Networks generation*** \
 The two networks generated are block-networks intended to represent a simplfied version of chromosomes contact maps. We considered the presence of two chromosomes.
 Matrixes are  therefore symmetric matrixes, whose indexes represent genomic loci (which are the nodes of the network). In this simplified representation, 
@@ -24,9 +22,9 @@ The way these walks are biased can be set by the user modifying the "p" and "q" 
 (see for details *node2vec: Scalable Feature Learning for Networks, 2016. url: https://arxiv.org/abs/1607.00653*).
 These walks are sequences of nodes from which a node embedding is extracted.
 Once we obtain the node embedding, we apply to it the K-means clustering algorithm. The optimal value for k is decided by using the elbow method.
-We compare then the way nodes are labelled by the k-means algorithm with the true labels we know (i.e., the chromosome of belonging). This comparison is made visually by using a t-SNE algorithm. We make also further analysis by changing the embedding dimension parameter of node2vec and seeing how nodes, with their true labels, are located in the t-SNE visualization.
+We compare then the way nodes are labelled by the k-means algorithm with the true labels we know (i.e. the chromosome of belonging). This comparison is made visually by using a t-SNE algorithm. We make also further analysis by changing the embedding dimension parameter of node2vec and seeing how nodes, with their true labels, are located in the t-SNE visualization.
 
-# Dependencies
+## Dependencies
 - random
 - numpy
 - pandas
@@ -37,7 +35,7 @@ We compare then the way nodes are labelled by the k-means algorithm with the tru
 - sklearn.cluster
 - sklearn.manfold
 
-# Main parameters
+## Main parameters
 In the following lines are indicated the main parameters the user can vary. \
 In the networks generation part:
 - *DIM_TOY2*: overall dimension of the "toy-network" generated;
@@ -56,7 +54,7 @@ In the network analysis part:
 - *early_exaggeration*, *perplexity*, *n_iter*, *n_iter_without_progress* and *learning_rate*: parameters of the t-SNE algorithm;
 - *dim_emb*: array of the embedding dimensions tested.
 
-# Example of results from the 2nd network
+## Example of results from the 2nd network
 <p align="middle">
 <img src="https://user-images.githubusercontent.com/79851792/189915690-1603f3f9-7e7a-4671-b977-49ad2000b244.png" width="400" height="400">
 <img src="https://user-images.githubusercontent.com/79851792/189883626-c87c469b-6bb6-4580-b1c7-1122194b8b53.png" width="400" height="400">
