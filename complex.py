@@ -158,6 +158,7 @@ toy_net2bis[np.ix_(zona_b22, zona_b22)]= block22
 
 plt.imshow(toy_net2bis)
 #plt.colorbar()
+#plt.title("Toy-network 2")
 plt.show()
 
 
