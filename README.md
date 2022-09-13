@@ -57,8 +57,11 @@ In the network analysis part:
 - *dim_emb*: array of the embedding dimensions tested.
 
 # Example of results from the 2nd network
-<img src="https://user-images.githubusercontent.com/79851792/189883575-206d1919-56ae-4391-9fc0-0b1682799db5.png" width="200" height="200">
-<img src="https://user-images.githubusercontent.com/79851792/189883626-c87c469b-6bb6-4580-b1c7-1122194b8b53.png" width="200" height="200">
-<img src="https://user-images.githubusercontent.com/79851792/189883649-243e1947-c60f-4557-892e-987bb41b49e3.png" width="200" height="200">
-<img src="https://user-images.githubusercontent.com/79851792/189883665-57493bc0-883f-4971-893b-0e224822538d.png" width="200" height="200">
-
+<p align="middle">
+<img src="https://user-images.githubusercontent.com/79851792/189915690-1603f3f9-7e7a-4671-b977-49ad2000b244.png" width="400" height="400">
+<img src="https://user-images.githubusercontent.com/79851792/189883626-c87c469b-6bb6-4580-b1c7-1122194b8b53.png" width="400" height="400">
+</p>
+<p align="middle">
+<img src="https://user-images.githubusercontent.com/79851792/189883649-243e1947-c60f-4557-892e-987bb41b49e3.png" width="400" height="400">
+<img src="https://user-images.githubusercontent.com/79851792/189883665-57493bc0-883f-4971-893b-0e224822538d.png" width="400" height="400">
+</p>
