@@ -45,9 +45,12 @@ In the networks generation part:
 - *P_NOISE*: probability of having a noise link in the network;
 - *P_BLOCKS*: probability of having a link between 2 loci belonging to the same chromosome;
 - *DIM_BLOCKS*: size of the chromosomes for the case in which the two of them have equal size. 
-                N.B.: this parameter should be coherent with *DIM_TOY2*.
+                N.B.: this parameter should be coherent with *DIM_TOY2*;
 - *DIM_BLOCK1* and *DIM_BLOCK2*: sizes of the two chromosomes (for the case in which their sizes can be different).
                 N.B.: their values should be coherent with *DIM_TOY2*.
 
 In the network analysis part:
-- **:
+- *p*, *q*, *n*, *length*: parameters of BiasedRandomWalk related to the generation of the biased random walks through the network;
+- *K*: range of k values tested with the k-means clustering algorithm to obtain the elbow curve;
+- *BEST_K_TOY1* and *BEST_K_TOY2*: optimal k values for the two networks individuated by looking at the elbow plot;
+- *early_exaggeration*, *perplexity*, *n_iter*, *n_iter_without_progress* and *learning_rate*: parameters of the t-SNE algorithm.
